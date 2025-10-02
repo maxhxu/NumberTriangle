@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -88,8 +89,15 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
-        return -1;
+        NumberTriangle nt = this;
+        for (char c : path.toCharArray()) {
+            if (c == 'l') {
+                nt = nt.left;
+            } else {
+                nt = nt.right;
+            }
+        }
+        return nt.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -109,22 +117,33 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-
-        // TODO define any variables that you want to use to store things
+        ArrayList<NumberTriangle> toplayer = new ArrayList<>();
+        ArrayList<NumberTriangle> bottomlayer = new ArrayList<>();
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
         NumberTriangle top = null;
 
         String line = br.readLine();
+
+        top = new NumberTriangle(Integer.parseInt(line));
+        toplayer.add(top);
+        line = br.readLine();
+
         while (line != null) {
+            String[] parts = line.split(" ");
+            for (String part : parts) {
+                bottomlayer.add(new NumberTriangle(Integer.parseInt(part)));
+            }
 
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
+            for (int i = 0; i < toplayer.size(); i++) {
+                toplayer.get(i).setLeft(bottomlayer.get(i));
+                toplayer.get(i).setRight(bottomlayer.get(i+1));
+            }
 
-            // TODO process the line
-
-            //read the next line
+            toplayer.clear();
+            toplayer = new ArrayList<>(bottomlayer);
+            bottomlayer.clear();
             line = br.readLine();
         }
         br.close();
