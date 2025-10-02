@@ -89,6 +89,7 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
+        // I'm supposed to make additional pull requests.
         NumberTriangle nt = this;
         for (char c : path.toCharArray()) {
             if (c == 'l') {
